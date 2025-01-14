@@ -6,6 +6,13 @@ It should work for both CP Flink, or Open Source Flink.
 
 The goal is to support SQL as application in CPF application mode.
 
+# Building
+
+```bash
+$ ./gradlew clean showdowJar
+```
+
+Built artifact is under ./build/libs folder
 
 # How to run
 
