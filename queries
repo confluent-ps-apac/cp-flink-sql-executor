@@ -1,0 +1,12 @@
+CREATE TABLE Orders (
+     order_number BIGINT,
+     price        DECIMAL(32,2),
+     buyer        ROW<first_name STRING, last_name STRING>,
+     order_time   TIMESTAMP(3)
+) WITH (
+   'connector' = 'datagen'
+ );
+-----
+create table total_orders(total_orders bigint, max_price DECIMAL(32,2)) with ('connector' = 'print');
+-----
+insert into total_orders select count(*) as total_orders, max(price) as max_price from Orders;
