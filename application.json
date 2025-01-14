@@ -1,0 +1,75 @@
+{
+  "apiVersion": "cmf.confluent.io/v1alpha1",
+  "kind": "FlinkApplication",
+  "metadata": {
+    "name": "sql-executor"
+  },
+  "spec": {
+    "image": "confluentinc/cp-flink:1.19.1-cp1",
+    "flinkVersion": "v1_19",
+    "serviceAccount": "flink",
+    "podTemplate": {
+        "spec": {
+          "containers": [
+            {
+              "name": "flink-main-container",
+              "volumeMounts": [
+                {
+                  "mountPath": "/opt/flink/downloads",
+                  "name": "downloads"
+                }
+              ]
+            }
+          ],
+          "volumes": [
+            {
+              "name": "downloads",
+              "emptyDir": {}
+            }
+          ]
+        }
+      },
+    "jobManager": {
+      "podTemplate": {
+
+        "spec": {
+            "initContainers": [
+    {
+      "name": "mc",
+      "image": "minio/mc",
+      "volumeMounts": [
+        {
+          "mountPath": "/opt/flink/downloads",
+          "name": "downloads"
+        }
+      ],
+      "command": [
+        "/bin/sh",
+        "-c",
+        "mc alias set dev-minio http://minio-service.minio-dev.svc.cluster.local:9000 minioadmin minioadmin && mc cp dev-minio/flink/flink-sql-executor-1.0.jar /opt/flink/downloads/flink-sql-executor-1.0.jar && mc cp dev-minio/flink/queries /opt/flink/downloads/queries"
+      ]
+    }
+  ]
+        }
+      },
+      "resource": {
+        "memory": "1024m",
+        "cpu": 1
+      }
+    },
+    "taskManager": {
+      "resource": {
+        "memory": "1024m",
+        "cpu": 1
+      }
+    },
+    "job": {
+      "jarURI": "local:///opt/flink/downloads/flink-sql-executor-1.0.jar",
+      "args": ["/opt/flink/downloads/queries"],
+      "state": "running",
+      "parallelism": 1,
+      "upgradeMode": "stateless"
+    }
+  },
+  "status": null
+}
