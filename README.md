@@ -261,7 +261,7 @@ Sample config of your job in JSON:
     },
     "job": {
       "jarURI": "local:///opt/flink/downloads/flink-sql-executor-1.0.jar",
-      "args": ["/opt/flink/downloads/queries"],
+      "args": ["/opt/flink/downloads/queries/query.sql"],
       "state": "running",
       "parallelism": 1,
       "upgradeMode": "stateless"
@@ -289,7 +289,7 @@ to dynamically download jars, and required parameters to the jar file and run.
 
 Of course, you may simplify the above by building docker file that:
 1. Copy the jar file into the container
-2. Copy the queris file into the container
+2. Copy the queries file into the container
 3. Start the docker.
 
 Example of Dockerfile:
