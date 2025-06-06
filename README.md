@@ -9,7 +9,7 @@ The goal is to support SQL as application in CPF application mode.
 # Building
 
 ```bash
-$ ./gradlew clean showdowJar
+$ ./gradlew clean shadowJar
 ```
 
 Built artifact is under ./build/libs folder
