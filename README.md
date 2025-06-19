@@ -302,4 +302,20 @@ COPY ./queries /opt/flink/downloads/queries
 
 In this case, you may save the minio part of the application.json.
 
+# Troubleshooting
 
+```
+Caused by: org.apache.flink.util.FlinkRuntimeException: Cannot have more than one execute() or executeAsync() call in a single environment.
+```
+
+This usually means you are submitting more than one job at a time. 
+You must split each job into one sql file. 
+For example, below is not allowed in one file because it's submitting two jobs (i.e. INSERTs). 
+
+```sql
+INSERT INTO foo
+SELECT * FROM bar;
+---
+INSERT INTO foo2
+SELECT * FROM bar2;
+```
